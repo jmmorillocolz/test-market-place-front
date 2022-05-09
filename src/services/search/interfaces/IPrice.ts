@@ -1,5 +1,7 @@
+import { ECurrency } from '../../../shared/enums/ECurrency';
+
 export interface IPrice {
-    currency: string;
+    currency: ECurrency;
     amount: number;
-    decimals: number;
+    decimals: string;
 }

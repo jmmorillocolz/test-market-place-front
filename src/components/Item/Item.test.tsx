@@ -2,6 +2,7 @@ import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import Item from './Item';
 import { BrowserRouter } from 'react-router-dom';
+import { ECurrency } from '../../shared/enums/ECurrency';
 
 describe('Item test', () => {
     it('click', async () => {
@@ -9,7 +10,7 @@ describe('Item test', () => {
             <BrowserRouter>
                 <Item
                     id={'1'}
-                    price={{ amount: 1500, decimals: 0 }}
+                    price={{ amount: 1500, decimals: '02', currency: ECurrency.ARS }}
                     description={'descripción de prueba'}
                     picture={'http://test.test'}
                     place={'testing'}

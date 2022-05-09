@@ -38,9 +38,11 @@ const SearchResults = (): JSX.Element => {
         items.forEach((item) => {
             const {
                 picture,
-                price: { amount, decimals },
+                price: { amount, decimals, currency },
                 title,
-                id: itemId
+                id: itemId,
+                address,
+                free_shipping
             } = item;
 
             const url = _CONFIG_.apiMarketPlace.details
@@ -51,11 +53,16 @@ const SearchResults = (): JSX.Element => {
                 <React.Fragment key={itemId}>
                     <Item
                         id={itemId}
-                        price={{ amount, decimals }}
+                        price={{
+                            amount,
+                            decimals,
+                            currency
+                        }}
                         description={title}
-                        place={'Buenos Aires'}
+                        place={address && address.length > 0 ? address : '-'}
                         picture={picture}
                         url={url}
+                        freeShipping={free_shipping}
                     />
                 </React.Fragment>
             );

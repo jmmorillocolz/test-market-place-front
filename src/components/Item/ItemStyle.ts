@@ -18,7 +18,7 @@ export const ItemStyle = {
     image: {
         width: 175,
         height: 175,
-        objectFit: 'scale-down'
+        objectFit: 'contain'
     } as React.CSSProperties,
     noImage: {
         opacity: 0.2,
@@ -48,6 +48,13 @@ export const ItemStyle = {
         marginTop: 15,
         marginLeft: 3,
         fontSize: '14px'
+    } as React.CSSProperties,
+    freeShipping: {
+        marginTop: 15,
+        marginLeft: 15,
+        color: 'green',
+        fontSize: 14,
+        fontWeight: 'bold'
     } as React.CSSProperties,
     description: {
         marginTop: 15,
