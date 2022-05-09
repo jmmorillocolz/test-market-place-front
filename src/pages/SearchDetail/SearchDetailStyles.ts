@@ -64,7 +64,9 @@ export const SearchDetailStyles = {
     } as React.CSSProperties,
     descriptionText: {
         fontSize: 22,
-        marginTop: 25
+        marginTop: 25,
+        whiteSpace: 'pre-line',
+        textAlign: 'justify'
     } as React.CSSProperties,
     condition: {
         fontSize: 18,
@@ -89,8 +91,15 @@ export const SearchDetailStyles = {
         marginTop: 8,
         marginLeft: 2
     } as React.CSSProperties,
+    freeShipping: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: 'green',
+        fontSize: 16,
+        fontWeight: 'bold'
+    } as React.CSSProperties,
     button: {
         border: '0px solid',
-        marginTop: 25
+        marginTop: 15
     } as React.CSSProperties
 };

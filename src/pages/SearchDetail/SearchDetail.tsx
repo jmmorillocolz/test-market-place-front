@@ -9,6 +9,8 @@ import { blue } from '@material-ui/core/colors';
 import { formatPrice } from '../../shared/utils/formats';
 import { EStatusCode } from '../../shared/enums/EStatusCode';
 import noImage from '../../assets/icons/noImage.svg';
+import { ECurrencySymbol } from '../../shared/enums/ECurrencySymbol';
+import { ECurrency } from '../../shared/enums/ECurrency';
 
 interface IConditions {
     [key: string]: string;
@@ -20,7 +22,7 @@ const AConditions: IConditions[] = [{ new: 'Nuevo' }];
  * @returns {JSX.Element}
  */
 const SearchDetail = (): JSX.Element => {
-    const [itemDetails, setItemDetails] = useState<IItem>();
+    const [itemDetails, setItemDetails] = useState<IItem>({} as IItem);
     const [itemCategory, setItemCategory] = useState<string[]>(['']);
     const [loaderIsHidden, setLoaderIsHidden] = useState<boolean>(true);
     const { id: idItemDetail } = useParams();
@@ -55,9 +57,9 @@ const SearchDetail = (): JSX.Element => {
         setLoaderIsHidden(false);
         SearchService.details(idItemDetail as string)
             .then((res) => {
-                const { code, payload: { item = null, categories = [] } = {} } = res;
+                const { code, payload: { item, categories = [] } = {} } = res;
                 if (code === EStatusCode.Success) {
-                    if (item !== null) {
+                    if (item) {
                         setItemDetails(item as IItem);
                         setItemCategory(categories);
                         setLoaderIsHidden(true);
@@ -105,15 +107,27 @@ const SearchDetail = (): JSX.Element => {
                     <div style={SearchDetailStyles.infoProductTitle}>{itemDetails?.title}</div>
                     <div style={SearchDetailStyles.infoProductPrice}>
                         <div style={SearchDetailStyles.amount}>
-                            {itemDetails?.price.amount
-                                ? formatPrice(itemDetails?.price.amount as number)
-                                : ''}
+                            {`${
+                                ECurrencySymbol[
+                                    itemDetails.price && itemDetails.price.currency
+                                        ? itemDetails?.price.currency
+                                        : ECurrency.ARS
+                                ]
+                            } ${
+                                (itemDetails?.price?.amount as number)
+                                    ? formatPrice(itemDetails.price.amount as number)
+                                    : ''
+                            }`}
                         </div>
                         <div style={SearchDetailStyles.amountDecimals}>
-                            {(itemDetails?.price.decimals as number) < 10
-                                ? `0${itemDetails?.price.decimals}`
-                                : itemDetails?.price.decimals}
+                            {itemDetails?.price?.decimals &&
+                            (itemDetails?.price?.decimals as string).length <= 1
+                                ? `${itemDetails?.price?.decimals as string}0`
+                                : (itemDetails?.price?.decimals as string)}
                         </div>
+                    </div>
+                    <div style={SearchDetailStyles.freeShipping}>
+                        {itemDetails.free_shipping ? 'Envío Gratis' : ''}
                     </div>
                     <div style={SearchDetailStyles.button}>
                         <ThemeProvider theme={customTheme}>
@@ -127,7 +141,11 @@ const SearchDetail = (): JSX.Element => {
                     <div style={SearchDetailStyles.descriptionTitle}>
                         {'Descripción del Producto'}
                     </div>
-                    <div style={SearchDetailStyles.descriptionText}>{itemDetails?.description}</div>
+                    <div style={SearchDetailStyles.descriptionText}>
+                        {itemDetails?.description && itemDetails?.description.length > 0
+                            ? itemDetails?.description
+                            : '** No se informó descripción del producto **'}
+                    </div>
                 </div>
             </div>
         </>

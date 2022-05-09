@@ -4,24 +4,36 @@ import { Link } from 'react-router-dom';
 import { formatPrice } from '../../shared/utils/formats';
 import { ItemStyle } from './ItemStyle';
 import noImage from '../../assets/icons/noImage.svg';
+import { ECurrencySymbol } from '../../shared/enums/ECurrencySymbol';
+import { ECurrency } from '../../shared/enums/ECurrency';
 
 interface IItem {
     id: string;
     price: {
         amount: number;
-        decimals: number;
+        decimals: string;
+        currency: ECurrency;
     };
     description: string;
     place: string;
     url: string;
     picture?: string;
+    freeShipping?: boolean;
 }
 
 /**
  * Search component
  * @returns {JSX.Element}
  */
-const Item = ({ id, price, description, place, url, picture = '' }: IItem): JSX.Element => {
+const Item = ({
+    id,
+    price,
+    description,
+    place,
+    url,
+    picture = '',
+    freeShipping = false
+}: IItem): JSX.Element => {
     return (
         <div style={ItemStyle.item} key={`item_${id}`}>
             <div style={ItemStyle.containerImage}>
@@ -38,10 +50,15 @@ const Item = ({ id, price, description, place, url, picture = '' }: IItem): JSX.
                 <Link to={url} style={ItemStyle.link}>
                     <div style={ItemStyle.priceContainer} key={`item_price_container_${id}`}>
                         <div style={ItemStyle.price} key={`item_price_${id}`}>
-                            $ {formatPrice(price.amount)}
+                            {`${
+                                ECurrencySymbol[price.currency ? price.currency : ECurrency.ARS]
+                            } ${formatPrice(price.amount)}`}
                         </div>
                         <div style={ItemStyle.priceDecimal} key={`item_price_decimals_${id}`}>
-                            {price.decimals < 10 ? `0${price.decimals}` : price.decimals}
+                            {price.decimals.length <= 1 ? `${price.decimals}0` : price.decimals}
+                        </div>
+                        <div style={ItemStyle.freeShipping}>
+                            {freeShipping ? 'Envío Gratis' : ''}
                         </div>
                     </div>
                 </Link>
